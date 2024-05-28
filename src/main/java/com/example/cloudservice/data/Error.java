@@ -1,4 +1,4 @@
-package com.example.cloudservice.something;
+package com.example.cloudservice.data;
 
 public class Error {
     int id;
