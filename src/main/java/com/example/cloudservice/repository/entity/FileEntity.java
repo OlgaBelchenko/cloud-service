@@ -9,21 +9,22 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "file")
+@Table(name = "files")
 public class FileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "file_name", unique = true)
+    @Column(name = "file_name", unique = true, nullable = false)
     private String fileName;
 
     @Column(name = "size")
     private Long size;
 
-    @Lob
-    byte[] content;
+    @Column(name = "content", nullable = false)
+    private byte[] content;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 }

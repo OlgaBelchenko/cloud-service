@@ -1,6 +1,6 @@
 package com.example.cloudservice.controller;
 
-import com.example.cloudservice.controller.dto.UserDto;
+import com.example.cloudservice.data.UserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

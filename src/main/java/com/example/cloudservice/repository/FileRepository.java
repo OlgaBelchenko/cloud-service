@@ -1,6 +1,5 @@
 package com.example.cloudservice.repository;
 
-import com.example.cloudservice.controller.dto.FileDto;
 import com.example.cloudservice.repository.entity.FileEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CloudRepository extends JpaRepository<FileEntity, Long> {
+public interface FileRepository extends JpaRepository<FileEntity, Long> {
 
     @Transactional
     @Query("delete from FileEntity where fileName = :fileName")
