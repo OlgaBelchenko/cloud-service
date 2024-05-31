@@ -32,7 +32,7 @@ public class FileController {
 
         fileService.deleteFile(token, fileName);
 
-        return new ResponseEntity<>("Success upload", HttpStatus.OK);
+        return new ResponseEntity<>("Success deleted", HttpStatus.OK);
     }
 
     @GetMapping
