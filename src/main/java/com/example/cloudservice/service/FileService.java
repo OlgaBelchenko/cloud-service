@@ -1,19 +1,19 @@
 package com.example.cloudservice.service;
 
-import com.example.cloudservice.data.FileDto;
+import com.example.cloudservice.dto.FileDto;
 import com.example.cloudservice.exception.ErrorGettingFileList;
 import com.example.cloudservice.exception.ErrorInputData;
 import com.example.cloudservice.exception.ErrorUploadFile;
 import com.example.cloudservice.repository.FileRepository;
 import com.example.cloudservice.repository.entity.FileEntity;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class FileService {
 
@@ -63,7 +63,6 @@ public class FileService {
         fileEntity.setFileName(fileName);
         fileEntity.setContent(file.getBytes());
         fileEntity.setSize(file.getSize());
-//        TODO fileEntity.setUser(fileDto.getUser());
         return fileEntity;
     }
 

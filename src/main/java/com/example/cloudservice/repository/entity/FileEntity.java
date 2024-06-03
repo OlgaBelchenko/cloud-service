@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "files")
 public class FileEntity {
     @Id
@@ -23,8 +23,4 @@ public class FileEntity {
 
     @Column(name = "content", nullable = false)
     private byte[] content;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
 }

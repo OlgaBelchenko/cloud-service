@@ -1,9 +1,8 @@
 package com.example.cloudservice.controller;
 
-import com.example.cloudservice.data.FileDto;
+import com.example.cloudservice.dto.FileDto;
 import com.example.cloudservice.service.FileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +22,7 @@ public class FileController {
 
         fileService.uploadFile(token, fileName, file);
 
-        return new ResponseEntity<>("Success upload", HttpStatus.OK);
+        return ResponseEntity.ok("Success upload");
     }
 
     @DeleteMapping
@@ -32,7 +31,7 @@ public class FileController {
 
         fileService.deleteFile(token, fileName);
 
-        return new ResponseEntity<>("Success deleted", HttpStatus.OK);
+        return ResponseEntity.ok("Success deleted");
     }
 
     @GetMapping
@@ -41,7 +40,7 @@ public class FileController {
 
         byte[] downloadedFile = fileService.downloadFile(token, fileName);
 
-        return new ResponseEntity<>(downloadedFile, HttpStatus.OK);
+        return ResponseEntity.ok(downloadedFile);
     }
 
     @PutMapping
@@ -51,7 +50,7 @@ public class FileController {
 
         fileService.editFileName(token, oldFileName, newFileName);
 
-        return new ResponseEntity<>("Success upload", HttpStatus.OK);
+        return ResponseEntity.ok("Success upload");
     }
 
     @GetMapping("/list")
@@ -59,6 +58,6 @@ public class FileController {
                                          @RequestParam("limit") Integer limit) {
 
         List<FileDto> allFiles = fileService.getAllFiles(token, limit);
-        return new ResponseEntity<>(allFiles, HttpStatus.OK);
+        return ResponseEntity.ok(allFiles);
     }
 }

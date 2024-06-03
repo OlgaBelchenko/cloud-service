@@ -1,37 +1,32 @@
 package com.example.cloudservice.service;
 
-import com.example.cloudservice.data.AuthToken;
-import com.example.cloudservice.data.UserDto;
+import com.example.cloudservice.config.CustomUserDetails;
 import com.example.cloudservice.exception.ErrorInputData;
 import com.example.cloudservice.repository.UserRepository;
 import com.example.cloudservice.repository.entity.UserEntity;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
-public class UserService {
+@RequiredArgsConstructor
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    public AuthToken login(UserDto user) {
-        UserEntity userEntity = userRepository.getUserByUsername(user.getUsername());
-        if (userEntity == null) {
-            throw new ErrorInputData("Bad credentials");
-        }
-        if (!userEntity.getPassword().equals(user.getPassword())) {
-            throw new ErrorInputData("Bad credentials");
-        }
-        return generateToken();
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user = getUserByUsername(username);
+        return new CustomUserDetails(user);
     }
 
-    private AuthToken generateToken() {
-        // TODO UserService generate token
-        return null;
+
+    public UserEntity getUserByUsername(String username) {
+        return userRepository.getUserByUsername(username).orElseThrow(() -> new ErrorInputData("Bad credentials"));
     }
 
     public void logout(String token) {
         // TODO UserService deactivate token
     }
-
-
 }
