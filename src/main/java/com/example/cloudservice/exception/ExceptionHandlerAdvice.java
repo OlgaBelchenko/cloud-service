@@ -27,4 +27,9 @@ public class ExceptionHandlerAdvice {
     public ResponseEntity<String> unauthorizedErrorHandler(UnauthorizedError e) {
         return new ResponseEntity<>(e.getMessage(), UNAUTHORIZED);
     }
+
+    @ExceptionHandler(ErrorBadCredentials.class)
+    public ResponseEntity<String> badCredentials(UnauthorizedError e) {
+        return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.cloudservice.service;
 
 import com.example.cloudservice.dto.UserDto;
-import com.example.cloudservice.exception.ErrorInputData;
+import com.example.cloudservice.exception.ErrorBadCredentials;
 import com.example.cloudservice.token.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +24,7 @@ public class AuthService {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         } catch (BadCredentialsException e) {
-            throw new ErrorInputData("Bad credentials");
+            throw new ErrorBadCredentials("Bad credentials");
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         return jwtTokenManager.generateJwtToken(userDetails);

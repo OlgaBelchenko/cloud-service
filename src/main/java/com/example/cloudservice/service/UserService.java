@@ -23,10 +23,6 @@ public class UserService implements UserDetailsService {
 
 
     public UserEntity getUserByUsername(String username) {
-        return userRepository.getUserByUsername(username).orElseThrow(() -> new ErrorInputData("Bad credentials"));
-    }
-
-    public void logout(String token) {
-        // TODO UserService deactivate token
+        return userRepository.findUserByUsername(username).orElseThrow(() -> new ErrorInputData("Bad credentials"));
     }
 }
