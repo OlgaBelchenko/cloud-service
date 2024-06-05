@@ -2,10 +2,12 @@ package com.example.cloudservice.service;
 
 import com.example.cloudservice.dto.FileDto;
 import com.example.cloudservice.exception.ErrorGettingFileList;
-import com.example.cloudservice.exception.ErrorInputData;
 import com.example.cloudservice.exception.ErrorUploadFile;
+import com.example.cloudservice.exception.UnauthorizedError;
 import com.example.cloudservice.repository.FileRepository;
+import com.example.cloudservice.repository.UserRepository;
 import com.example.cloudservice.repository.entity.FileEntity;
+import com.example.cloudservice.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,48 +25,58 @@ public class FileService {
     private final static String ERROR_UPLOAD_FILE = "Error upload file";
     private final static String ERROR_FILE_LIST = "Error getting file list";
     private final FileRepository fileRepository;
+    private final UserRepository userRepository;
 
-    public void uploadFile(String token, String fileName, MultipartFile file) {
-        try {
-            fileRepository.save(mapToFileEntity(fileName, file));
-        } catch (IOException e) {
-            throw new ErrorInputData(ERROR_INPUT_DATA);
-        }
-    }
-
-    public void deleteFile(String token, String fileName) {
-        // TODO error
-        fileRepository.deleteFile(fileName);
-    }
-
-    public byte[] downloadFile(String token, String fileName) {
-        byte[] file = fileRepository.downloadFile(fileName);
-        if (file == null || file.length == 0) {
-            throw new ErrorUploadFile(ERROR_UPLOAD_FILE);
-        }
-        return file;
-    }
-
-    public void editFileName(String token, String oldFileName, String newFileName) {
-        // TODO error
-        fileRepository.editFileName(oldFileName, newFileName);
-    }
-
-    public List<FileDto> getAllFiles(String token, Integer limit) {
-        List<FileEntity> fileEntities = fileRepository.getAllFiles(limit);
-        if (fileEntities == null) {
-            throw new ErrorGettingFileList(ERROR_FILE_LIST);
-        }
-        return fileEntities.stream().map(this::mapToFileDto).toList();
-    }
-
-    private FileEntity mapToFileEntity(String fileName, MultipartFile file) throws IOException {
+    public void uploadFile(String username, String fileName, MultipartFile file) throws IOException {
+        UserEntity userEntity = getUserEntity(username);
         FileEntity fileEntity = new FileEntity();
         fileEntity.setFileName(fileName);
-        fileEntity.setContent(file.getBytes());
         fileEntity.setSize(file.getSize());
-        return fileEntity;
+        fileEntity.setContent(file.getBytes());
+        fileEntity.setUser(userEntity);
+        fileRepository.save(fileEntity);
     }
+
+    public void deleteFile(String username, String fileName) {
+        fileRepository.delete(getFileEntityByUserFileName(username, fileName));
+    }
+
+    public byte[] downloadFile(String username, String fileName) {
+        FileEntity fileEntity = getFileEntityByUserFileName(username, fileName);
+        if (fileEntity == null) {
+            throw new ErrorUploadFile(ERROR_UPLOAD_FILE);
+        }
+        return fileEntity.getContent();
+    }
+
+    public void editFileName(String username, String oldFileName, String newFileName) {
+        FileEntity fileEntity = getFileEntityByUserFileName(username, oldFileName);
+        fileEntity.setFileName(newFileName);
+    }
+
+    public List<FileDto> getAllFiles(Integer limit) {
+        List<FileEntity> fileEntities = fileRepository.findAll();
+        return fileEntities.stream().limit(limit).map(this::mapToFileDto).toList();
+    }
+
+    private FileEntity getFileEntityByUserFileName(String username, String fileName) {
+        UserEntity user = getUserEntity(username);
+        return fileRepository.findByFileNameAndUser(fileName, user)
+                .orElseThrow(() -> new ErrorGettingFileList(ERROR_FILE_LIST));
+    }
+
+    private UserEntity getUserEntity(String username) {
+        return userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UnauthorizedError(ERROR_UNAUTHORIZED));
+    }
+
+//    private FileEntity mapToFileEntity(String fileName, MultipartFile file) throws IOException {
+//        FileEntity fileEntity = new FileEntity();
+//        fileEntity.setFileName(fileName);
+//        fileEntity.setContent(file.getBytes());
+//        fileEntity.setSize(file.getSize());
+//        return fileEntity;
+//    }
 
     private FileDto mapToFileDto(FileEntity file) {
         return new FileDto(file.getFileName(), file.getSize(), file.getContent());

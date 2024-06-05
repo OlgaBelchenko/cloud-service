@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin
@@ -16,48 +18,47 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping("/file")
-    public ResponseEntity<?> uploadFile(@RequestHeader("auth-token") String token,
+    public ResponseEntity<?> uploadFile(Principal userPrincipal,
                                         @RequestParam("filename") String fileName,
-                                        @RequestBody MultipartFile file) {
+                                        @RequestBody MultipartFile file) throws IOException {
 
-        fileService.uploadFile(token, fileName, file);
+        fileService.uploadFile(userPrincipal.getName(), fileName, file);
 
         return ResponseEntity.ok("Success upload");
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteFile(@RequestHeader("auth-token") String token,
+    public ResponseEntity<?> deleteFile(Principal userPrincipal,
                                         @RequestParam("filename") String fileName) {
 
-        fileService.deleteFile(token, fileName);
+        fileService.deleteFile(userPrincipal.getName(), fileName);
 
         return ResponseEntity.ok("Success deleted");
     }
 
     @GetMapping
-    public ResponseEntity<?> downloadFile(@RequestHeader("auth-token") String token,
-                                          @RequestParam("filename") String fileName) {
+    public ResponseEntity<?> downloadFile(Principal userPrincipal, @RequestParam("filename") String fileName) {
 
-        byte[] downloadedFile = fileService.downloadFile(token, fileName);
+        byte[] downloadedFile = fileService.downloadFile(userPrincipal.getName(), fileName);
 
         return ResponseEntity.ok(downloadedFile);
     }
 
     @PutMapping
-    public ResponseEntity<?> editFileName(@RequestHeader("auth-token") String token,
+    public ResponseEntity<?> editFileName(Principal userPrincipal,
                                           @RequestParam("filename") String oldFileName,
                                           String newFileName) {
 
-        fileService.editFileName(token, oldFileName, newFileName);
+        fileService.editFileName(userPrincipal.getName(), oldFileName, newFileName);
 
         return ResponseEntity.ok("Success upload");
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> getAllFiles(@RequestHeader("auth-token") String token,
+    public ResponseEntity<?> getAllFiles(Principal userPrincipal,
                                          @RequestParam("limit") Integer limit) {
 
-        List<FileDto> allFiles = fileService.getAllFiles(token, limit);
+        List<FileDto> allFiles = fileService.getAllFiles(limit);
         return ResponseEntity.ok(allFiles);
     }
 }

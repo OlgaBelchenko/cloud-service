@@ -23,4 +23,8 @@ public class FileEntity {
 
     @Column(name = "content", nullable = false)
     private byte[] content;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
 }

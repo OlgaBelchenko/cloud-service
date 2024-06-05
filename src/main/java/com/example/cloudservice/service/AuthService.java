@@ -22,11 +22,11 @@ public class AuthService {
     public String generateToken(UserDto user) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+                    new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
         } catch (BadCredentialsException e) {
             throw new ErrorBadCredentials("Bad credentials");
         }
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());
         return jwtTokenManager.generateJwtToken(userDetails);
     }
 }
