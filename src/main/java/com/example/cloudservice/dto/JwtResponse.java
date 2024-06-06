@@ -2,11 +2,9 @@ package com.example.cloudservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class JwtResponse {
     @JsonProperty(value = "auth-token")

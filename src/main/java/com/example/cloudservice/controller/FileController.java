@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class FileController {
@@ -27,7 +27,7 @@ public class FileController {
         return ResponseEntity.ok("Success upload");
     }
 
-    @DeleteMapping
+    @DeleteMapping("/file")
     public ResponseEntity<?> deleteFile(Principal userPrincipal,
                                         @RequestParam("filename") String fileName) {
 
@@ -36,7 +36,7 @@ public class FileController {
         return ResponseEntity.ok("Success deleted");
     }
 
-    @GetMapping
+    @GetMapping("/file")
     public ResponseEntity<?> downloadFile(Principal userPrincipal, @RequestParam("filename") String fileName) {
 
         byte[] downloadedFile = fileService.downloadFile(userPrincipal.getName(), fileName);
@@ -44,7 +44,7 @@ public class FileController {
         return ResponseEntity.ok(downloadedFile);
     }
 
-    @PutMapping
+    @PutMapping("/file")
     public ResponseEntity<?> editFileName(Principal userPrincipal,
                                           @RequestParam("filename") String oldFileName,
                                           String newFileName) {
@@ -56,9 +56,8 @@ public class FileController {
 
     @GetMapping("/list")
     public ResponseEntity<?> getAllFiles(Principal userPrincipal,
-                                         @RequestParam("limit") Integer limit) {
-
-        List<FileDto> allFiles = fileService.getAllFiles(limit);
+                                         @RequestParam("limit") int limit) {
+        List<FileDto> allFiles = fileService.getAllFiles(userPrincipal.getName(), limit);
         return ResponseEntity.ok(allFiles);
     }
 }

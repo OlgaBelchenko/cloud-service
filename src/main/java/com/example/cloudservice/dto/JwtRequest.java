@@ -1,10 +1,8 @@
 package com.example.cloudservice.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class JwtRequest {
     private String username;
     private String password;

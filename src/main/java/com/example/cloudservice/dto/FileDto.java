@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class FileDto {
-    String fileName;
-    Long fileSize;
-    byte[] fileContent;
+    String filename;
+    Long size;
 }

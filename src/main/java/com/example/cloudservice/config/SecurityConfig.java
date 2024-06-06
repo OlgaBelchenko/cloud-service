@@ -25,6 +25,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class SecurityConfig implements WebMvcConfigurer {
 
+    private final static String LOGIN_ENDPOINT = "/login";
+    private final static String LOGOUT_ENDPOINT = "/logout";
+
     private final JwtRequestFilter jwtRequestFilter;
     private final UserDetailsService userDetailsService;
 
@@ -37,12 +40,11 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers(LOGIN_ENDPOINT).permitAll()
                         .anyRequest().authenticated())
-                .logout(logoutConfigurer ->
-                        logoutConfigurer
-                                .logoutUrl("/logout")
-                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()))
+                .logout(logout -> logout.logoutUrl(LOGOUT_ENDPOINT)
+                        .logoutSuccessHandler(
+                                ((request, response, authentication) -> SecurityContextHolder.clearContext())))
                 .build();
     }
 
@@ -68,7 +70,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowCredentials(true)
-                .allowedOrigins("http://localhost:8080", "http://localhost:8081")
+                .allowedOrigins("http://localhost:8081")
                 .allowedMethods("*");
     }
 }

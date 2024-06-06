@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -52,10 +53,12 @@ public class FileService {
     public void editFileName(String username, String oldFileName, String newFileName) {
         FileEntity fileEntity = getFileEntityByUserFileName(username, oldFileName);
         fileEntity.setFileName(newFileName);
+        fileRepository.save(fileEntity);
     }
 
-    public List<FileDto> getAllFiles(Integer limit) {
-        List<FileEntity> fileEntities = fileRepository.findAll();
+    public List<FileDto> getAllFiles(String username, int limit) {
+        UserEntity userEntity = getUserEntity(username);
+        List<FileEntity> fileEntities = fileRepository.findAllByUser(userEntity).orElse(new ArrayList<>());
         return fileEntities.stream().limit(limit).map(this::mapToFileDto).toList();
     }
 
@@ -70,15 +73,7 @@ public class FileService {
                 .orElseThrow(() -> new UnauthorizedError(ERROR_UNAUTHORIZED));
     }
 
-//    private FileEntity mapToFileEntity(String fileName, MultipartFile file) throws IOException {
-//        FileEntity fileEntity = new FileEntity();
-//        fileEntity.setFileName(fileName);
-//        fileEntity.setContent(file.getBytes());
-//        fileEntity.setSize(file.getSize());
-//        return fileEntity;
-//    }
-
     private FileDto mapToFileDto(FileEntity file) {
-        return new FileDto(file.getFileName(), file.getSize(), file.getContent());
+        return new FileDto(file.getFileName(), file.getSize());
     }
 }
