@@ -8,18 +8,6 @@ services:
       - 8080:8080
     depends_on:
       - db
-    environment:
-      - 'SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/postgres'
-      - 'SPRING_DATASOURCE_USERNAME=postgres'
-      - 'SPRING_DATASOURCE_PASSWORD=postgres'
-      - 'SPRING_JPA_HIBERNATE_DDL_AUTO=update'
-      - 'SPRING_LIQUIBASE_URL=jdbc:postgresql://database:5432/postgres'
-      - 'SPRING_LIQUIBASE_USER=postgres'
-      - 'SPRING_LIQUIBASE_PASSWORD=postgres'
-      - 'SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=20MB'
-      - 'SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=20MB'
-      - 'JWT_SECRET=lk;oireurtu3498ugoilds;gah;rh2EGk3jhrkjhhg84hhtrhazdthGREEjdshgjkrh;akrjgh83ut4oitjhg8fti48t30dfkjoiJAOIUou'
-      - 'JWT_LIFETIME=1000m'
 
   db:
     image: postgres
@@ -32,3 +20,4 @@ services:
     volumes:
       - /resources/db/changelog
       - /var/lib/postgresql/data
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
