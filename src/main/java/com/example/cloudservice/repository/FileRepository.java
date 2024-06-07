@@ -11,5 +11,6 @@ import java.util.Optional;
 @Repository
 public interface FileRepository extends JpaRepository<FileEntity, Long> {
     Optional<FileEntity> findByFileNameAndUser(String fileName, UserEntity user);
+
     Optional<List<FileEntity>> findAllByUser(UserEntity user);
 }

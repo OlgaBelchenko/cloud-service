@@ -1,6 +1,6 @@
 package com.example.cloudservice.controller;
 
-import com.example.cloudservice.dto.JwtResponse;
+import com.example.cloudservice.dto.LoginResponse;
 import com.example.cloudservice.dto.UserDto;
 import com.example.cloudservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class AuthController {
@@ -18,6 +19,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDto user) {
         String token = authService.generateToken(user);
-        return ResponseEntity.ok(new JwtResponse(token));
+        log.info("Successfully logged in: {}", user.getLogin());
+        return ResponseEntity.ok(new LoginResponse(token));
     }
 }

@@ -4,6 +4,7 @@ import com.example.cloudservice.dto.UserDto;
 import com.example.cloudservice.exception.ErrorBadCredentials;
 import com.example.cloudservice.token.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -24,6 +26,7 @@ public class AuthService {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
         } catch (BadCredentialsException e) {
+            log.error("Bad credentials for username: {}", user.getLogin());
             throw new ErrorBadCredentials("Bad credentials");
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());

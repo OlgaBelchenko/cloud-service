@@ -2,6 +2,7 @@ package com.example.cloudservice.service;
 
 import com.example.cloudservice.dto.FileDto;
 import com.example.cloudservice.exception.ErrorGettingFileList;
+import com.example.cloudservice.exception.ErrorInputData;
 import com.example.cloudservice.exception.ErrorUploadFile;
 import com.example.cloudservice.exception.UnauthorizedError;
 import com.example.cloudservice.repository.FileRepository;
@@ -9,6 +10,7 @@ import com.example.cloudservice.repository.UserRepository;
 import com.example.cloudservice.repository.entity.FileEntity;
 import com.example.cloudservice.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FileService {
@@ -35,16 +38,27 @@ public class FileService {
         fileEntity.setSize(file.getSize());
         fileEntity.setContent(file.getBytes());
         fileEntity.setUser(userEntity);
-        fileRepository.save(fileEntity);
+        try {
+            fileRepository.save(fileEntity);
+        } catch (Exception e) {
+            log.error("Error uploading file");
+            throw new ErrorInputData(ERROR_INPUT_DATA);
+        }
     }
 
     public void deleteFile(String username, String fileName) {
-        fileRepository.delete(getFileEntityByUserFileName(username, fileName));
+        try {
+            fileRepository.delete(getFileEntityByUserFileName(username, fileName));
+        } catch (Exception e) {
+            log.error("Error deleting file: {}", fileName);
+            throw new ErrorInputData(ERROR_DELETE_FILE);
+        }
     }
 
     public byte[] downloadFile(String username, String fileName) {
         FileEntity fileEntity = getFileEntityByUserFileName(username, fileName);
         if (fileEntity == null) {
+            log.error("File not found: {}", fileName);
             throw new ErrorUploadFile(ERROR_UPLOAD_FILE);
         }
         return fileEntity.getContent();

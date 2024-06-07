@@ -3,7 +3,7 @@ package com.example.cloudservice.dto;
 import lombok.Data;
 
 @Data
-public class JwtRequest {
+public class LoginRequest {
     private String username;
     private String password;
 }

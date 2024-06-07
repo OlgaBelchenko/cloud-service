@@ -1,9 +1,10 @@
 package com.example.cloudservice.controller;
 
-import com.example.cloudservice.dto.FileDto;
 import com.example.cloudservice.dto.EditFileNameRequest;
+import com.example.cloudservice.dto.FileDto;
 import com.example.cloudservice.service.FileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
-//@CrossOrigin
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class FileController {
@@ -24,6 +25,7 @@ public class FileController {
                                         @RequestBody MultipartFile file) throws IOException {
 
         fileService.uploadFile(userPrincipal.getName(), fileName, file);
+        log.info("File uploaded successfully: {}", fileName);
 
         return ResponseEntity.ok("Success upload");
     }
@@ -33,6 +35,7 @@ public class FileController {
                                         @RequestParam("filename") String fileName) {
 
         fileService.deleteFile(userPrincipal.getName(), fileName);
+        log.info("File deleted successfully: {}", fileName);
 
         return ResponseEntity.ok("Success deleted");
     }
@@ -41,6 +44,7 @@ public class FileController {
     public ResponseEntity<?> downloadFile(Principal userPrincipal, @RequestParam("filename") String fileName) {
 
         byte[] downloadedFile = fileService.downloadFile(userPrincipal.getName(), fileName);
+        log.info("File downloaded successfully: {}", fileName);
 
         return ResponseEntity.ok(downloadedFile);
     }
@@ -51,6 +55,7 @@ public class FileController {
                                           @RequestBody EditFileNameRequest newFileName) {
 
         fileService.editFileName(userPrincipal.getName(), oldFileName, newFileName.getFilename());
+        log.info("File renamed successfully, new filename is: {}", newFileName.getFilename());
 
         return ResponseEntity.ok("Success upload");
     }
