@@ -10,8 +10,9 @@ CREATE TABLE cloud_service.users
 CREATE TABLE cloud_service.files
 (
     id        SERIAL PRIMARY KEY,
-    file_name VARCHAR UNIQUE NOT NULL,
-    size      BIGINT         NOT NULL,
-    content   BYTEA          NOT NULL,
-    user_id   SERIAL REFERENCES cloud_service.users (id) ON DELETE SET NULL
+    file_name VARCHAR NOT NULL,
+    size      BIGINT  NOT NULL,
+    content   BYTEA   NOT NULL,
+    user_id   SERIAL  REFERENCES cloud_service.users (id) ON DELETE SET NULL,
+    CONSTRAINT uq_files UNIQUE (file_name, user_id)
 );

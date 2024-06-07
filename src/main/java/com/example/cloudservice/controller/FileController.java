@@ -1,6 +1,7 @@
 package com.example.cloudservice.controller;
 
 import com.example.cloudservice.dto.FileDto;
+import com.example.cloudservice.dto.EditFileNameRequest;
 import com.example.cloudservice.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,9 +48,9 @@ public class FileController {
     @PutMapping("/file")
     public ResponseEntity<?> editFileName(Principal userPrincipal,
                                           @RequestParam("filename") String oldFileName,
-                                          String newFileName) {
+                                          @RequestBody EditFileNameRequest newFileName) {
 
-        fileService.editFileName(userPrincipal.getName(), oldFileName, newFileName);
+        fileService.editFileName(userPrincipal.getName(), oldFileName, newFileName.getFilename());
 
         return ResponseEntity.ok("Success upload");
     }
