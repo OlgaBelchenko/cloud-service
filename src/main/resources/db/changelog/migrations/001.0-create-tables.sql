@@ -1,4 +1,7 @@
 --changeset 1
+CREATE SCHEMA IF NOT EXISTS cloud_service;
+
+--changeset 2
 CREATE TABLE cloud_service.users
 (
     id       SERIAL PRIMARY KEY,
@@ -6,7 +9,7 @@ CREATE TABLE cloud_service.users
     password VARCHAR(256)       NOT NULL
 );
 
---changeset 2
+--changeset 3
 CREATE TABLE cloud_service.files
 (
     id        SERIAL PRIMARY KEY,

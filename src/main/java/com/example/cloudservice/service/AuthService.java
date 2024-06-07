@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import static com.example.cloudservice.exception.ErrorMessage.ERROR_BAD_CREDENTIALS;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
         } catch (BadCredentialsException e) {
             log.error("Bad credentials for username: {}", user.getLogin());
-            throw new ErrorBadCredentials("Bad credentials");
+            throw new ErrorBadCredentials(ERROR_BAD_CREDENTIALS.toString());
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());
         return jwtTokenManager.generateJwtToken(userDetails);

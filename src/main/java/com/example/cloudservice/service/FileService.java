@@ -18,16 +18,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.cloudservice.exception.ErrorMessage.*;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class FileService {
 
-    private final static String ERROR_INPUT_DATA = "Error input data";
-    private final static String ERROR_UNAUTHORIZED = "Unauthorized error";
-    private final static String ERROR_DELETE_FILE = "Error delete file";
-    private final static String ERROR_UPLOAD_FILE = "Error upload file";
-    private final static String ERROR_FILE_LIST = "Error getting file list";
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
 
@@ -42,7 +39,7 @@ public class FileService {
             fileRepository.save(fileEntity);
         } catch (Exception e) {
             log.error("Error uploading file");
-            throw new ErrorInputData(ERROR_INPUT_DATA);
+            throw new ErrorInputData(ERROR_INPUT_DATA.toString());
         }
     }
 
@@ -51,7 +48,7 @@ public class FileService {
             fileRepository.delete(getFileEntityByUserFileName(username, fileName));
         } catch (Exception e) {
             log.error("Error deleting file: {}", fileName);
-            throw new ErrorInputData(ERROR_DELETE_FILE);
+            throw new ErrorInputData(ERROR_DELETE_FILE.toString());
         }
     }
 
@@ -59,7 +56,7 @@ public class FileService {
         FileEntity fileEntity = getFileEntityByUserFileName(username, fileName);
         if (fileEntity == null) {
             log.error("File not found: {}", fileName);
-            throw new ErrorUploadFile(ERROR_UPLOAD_FILE);
+            throw new ErrorUploadFile(ERROR_UPLOAD_FILE.toString());
         }
         return fileEntity.getContent();
     }
@@ -79,12 +76,12 @@ public class FileService {
     private FileEntity getFileEntityByUserFileName(String username, String fileName) {
         UserEntity user = getUserEntity(username);
         return fileRepository.findByFileNameAndUser(fileName, user)
-                .orElseThrow(() -> new ErrorGettingFileList(ERROR_FILE_LIST));
+                .orElseThrow(() -> new ErrorGettingFileList(ERROR_FILE_LIST.toString()));
     }
 
     private UserEntity getUserEntity(String username) {
         return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UnauthorizedError(ERROR_UNAUTHORIZED));
+                .orElseThrow(() -> new UnauthorizedError(ERROR_UNAUTHORIZED.toString()));
     }
 
     private FileDto mapToFileDto(FileEntity file) {
