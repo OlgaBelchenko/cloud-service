@@ -1,6 +1,6 @@
 package com.example.cloudservice.service;
 
-import com.example.cloudservice.dto.UserDto;
+import com.example.cloudservice.controller.dto.UserDto;
 import com.example.cloudservice.exception.ErrorBadCredentials;
 import com.example.cloudservice.token.JwtTokenManager;
 import lombok.RequiredArgsConstructor;

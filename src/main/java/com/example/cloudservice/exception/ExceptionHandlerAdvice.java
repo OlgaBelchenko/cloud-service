@@ -1,6 +1,6 @@
 package com.example.cloudservice.exception;
 
-import com.example.cloudservice.dto.ErrorResponse;
+import com.example.cloudservice.controller.dto.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

@@ -1,4 +1,4 @@
-package com.example.cloudservice.dto;
+package com.example.cloudservice.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

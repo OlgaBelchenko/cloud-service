@@ -1,7 +1,7 @@
 package com.example.cloudservice.controller;
 
-import com.example.cloudservice.dto.LoginResponse;
-import com.example.cloudservice.dto.UserDto;
+import com.example.cloudservice.controller.dto.LoginResponse;
+import com.example.cloudservice.controller.dto.UserDto;
 import com.example.cloudservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

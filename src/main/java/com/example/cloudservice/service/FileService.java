@@ -1,6 +1,6 @@
 package com.example.cloudservice.service;
 
-import com.example.cloudservice.dto.FileDto;
+import com.example.cloudservice.controller.dto.FileDto;
 import com.example.cloudservice.exception.ErrorGettingFileList;
 import com.example.cloudservice.exception.ErrorInputData;
 import com.example.cloudservice.exception.ErrorUploadFile;

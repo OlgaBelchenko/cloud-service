@@ -1,7 +1,7 @@
 package com.example.cloudservice.controller;
 
-import com.example.cloudservice.dto.EditFileNameRequest;
-import com.example.cloudservice.dto.FileDto;
+import com.example.cloudservice.controller.dto.EditFileNameRequest;
+import com.example.cloudservice.controller.dto.FileDto;
 import com.example.cloudservice.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
