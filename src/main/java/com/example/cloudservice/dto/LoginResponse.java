@@ -1,4 +1,4 @@
-package com.example.cloudservice.controller.dto;
+package com.example.cloudservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,9 @@
 package com.example.cloudservice.controller;
 
-import com.example.cloudservice.controller.dto.EditFileNameRequest;
-import com.example.cloudservice.controller.dto.FileDto;
+import com.example.cloudservice.dto.EditFileNameRequest;
+import com.example.cloudservice.dto.FileDto;
 import com.example.cloudservice.service.FileService;
+import com.example.cloudservice.utils.mapper.FileMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +64,10 @@ public class FileController {
     @GetMapping("/list")
     public ResponseEntity<?> getAllFiles(Principal userPrincipal,
                                          @RequestParam("limit") int limit) {
-        List<FileDto> allFiles = fileService.getAllFiles(userPrincipal.getName(), limit);
+        List<FileDto> allFiles = fileService.getAllFiles(userPrincipal.getName(), limit)
+                .stream().
+                map(FileMapper::mapToFileDto)
+                .toList();
         return ResponseEntity.ok(allFiles);
     }
 }

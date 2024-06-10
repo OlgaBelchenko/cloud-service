@@ -3,7 +3,7 @@ package com.example.cloudservice.service;
 import com.example.cloudservice.config.CustomUserDetails;
 import com.example.cloudservice.exception.ErrorInputData;
 import com.example.cloudservice.repository.UserRepository;
-import com.example.cloudservice.repository.entity.UserEntity;
+import com.example.cloudservice.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

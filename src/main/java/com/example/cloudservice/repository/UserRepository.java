@@ -1,6 +1,6 @@
 package com.example.cloudservice.repository;
 
-import com.example.cloudservice.repository.entity.UserEntity;
+import com.example.cloudservice.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

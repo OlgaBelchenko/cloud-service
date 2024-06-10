@@ -1,8 +1,9 @@
 package com.example.cloudservice.controller;
 
-import com.example.cloudservice.controller.dto.LoginResponse;
-import com.example.cloudservice.controller.dto.UserDto;
+import com.example.cloudservice.dto.LoginResponse;
+import com.example.cloudservice.dto.UserDto;
 import com.example.cloudservice.service.AuthService;
+import com.example.cloudservice.utils.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDto user) {
-        String token = authService.generateToken(user);
+        String token = authService.generateToken(UserMapper.mapToUserEntity(user));
         log.info("Successfully logged in: {}", user.getLogin());
         return ResponseEntity.ok(new LoginResponse(token));
     }

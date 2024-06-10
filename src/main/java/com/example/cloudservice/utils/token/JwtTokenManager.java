@@ -1,4 +1,4 @@
-package com.example.cloudservice.token;
+package com.example.cloudservice.utils.token;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -60,6 +60,4 @@ public class JwtTokenManager {
                 .parseSignedClaims(token)
                 .getPayload();
     }
-
-
 }

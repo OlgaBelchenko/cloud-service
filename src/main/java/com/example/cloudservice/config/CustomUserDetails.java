@@ -1,18 +1,12 @@
 package com.example.cloudservice.config;
 
-import com.example.cloudservice.repository.entity.UserEntity;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.example.cloudservice.model.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@RequiredArgsConstructor
-@Getter
-public class CustomUserDetails implements UserDetails {
-    private final UserEntity user;
-
+public record CustomUserDetails(UserEntity user) implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

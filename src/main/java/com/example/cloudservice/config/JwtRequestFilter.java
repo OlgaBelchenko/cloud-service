@@ -1,6 +1,6 @@
 package com.example.cloudservice.config;
 
-import com.example.cloudservice.token.JwtTokenManager;
+import com.example.cloudservice.utils.token.JwtTokenManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.example.cloudservice.repository.entity;
+package com.example.cloudservice.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

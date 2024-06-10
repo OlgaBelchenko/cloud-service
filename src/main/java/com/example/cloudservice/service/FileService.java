@@ -1,14 +1,13 @@
 package com.example.cloudservice.service;
 
-import com.example.cloudservice.controller.dto.FileDto;
 import com.example.cloudservice.exception.ErrorGettingFileList;
 import com.example.cloudservice.exception.ErrorInputData;
 import com.example.cloudservice.exception.ErrorUploadFile;
 import com.example.cloudservice.exception.UnauthorizedError;
 import com.example.cloudservice.repository.FileRepository;
 import com.example.cloudservice.repository.UserRepository;
-import com.example.cloudservice.repository.entity.FileEntity;
-import com.example.cloudservice.repository.entity.UserEntity;
+import com.example.cloudservice.model.FileEntity;
+import com.example.cloudservice.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -67,10 +66,10 @@ public class FileService {
         fileRepository.save(fileEntity);
     }
 
-    public List<FileDto> getAllFiles(String username, int limit) {
+    public List<FileEntity> getAllFiles(String username, int limit) {
         UserEntity userEntity = getUserEntity(username);
         List<FileEntity> fileEntities = fileRepository.findAllByUser(userEntity).orElse(new ArrayList<>());
-        return fileEntities.stream().limit(limit).map(this::mapToFileDto).toList();
+        return fileEntities.stream().limit(limit).toList();
     }
 
     private FileEntity getFileEntityByUserFileName(String username, String fileName) {
@@ -82,9 +81,5 @@ public class FileService {
     private UserEntity getUserEntity(String username) {
         return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UnauthorizedError(ERROR_UNAUTHORIZED.toString()));
-    }
-
-    private FileDto mapToFileDto(FileEntity file) {
-        return new FileDto(file.getFileName(), file.getSize());
     }
 }
