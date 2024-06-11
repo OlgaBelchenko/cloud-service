@@ -23,7 +23,7 @@ public class AuthService {
     private final JwtTokenManager jwtTokenManager;
     private final UserDetailsService userDetailsService;
 
-    public String generateToken(UserEntity user) {
+    public String authenticate(UserEntity user) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));

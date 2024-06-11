@@ -17,12 +17,11 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = getUserByUsername(username);
+        UserEntity user = getUserFromDatabaseByUsername(username);
         return new CustomUserDetails(user);
     }
 
-
-    public UserEntity getUserByUsername(String username) {
+    public UserEntity getUserFromDatabaseByUsername(String username) {
         return userRepository.findUserByUsername(username).orElseThrow(() -> new ErrorInputData("Bad credentials"));
     }
 }
