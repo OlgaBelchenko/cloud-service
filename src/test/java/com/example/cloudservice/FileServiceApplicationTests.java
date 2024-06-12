@@ -1,5 +1,8 @@
 package com.example.cloudservice;
 
+import com.example.cloudservice.dto.UserDto;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,43 +11,88 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
+import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.example.cloudservice.testutils.TestUtils.*;
 
 @Testcontainers
+@AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {FileServiceApplicationTests.Initializer.class})
-@AutoConfigureMockMvc(addFilters = false)
+@Transactional
 class FileServiceApplicationTests {
 
-    private static final int DB_PORT = 5432;
-    private static final String DB_NAME = "cloud_db";
-    private static final String DB_USERNAME = "postgres";
-    private static final String DB_PASSWORD = "postgres";
-    private final static Network NETWORK = Network.newNetwork();
-//    private final static int BACKEND_PORT = 8080;
+    @Autowired
+    private MockMvc mockMvc;
 
     @Autowired
     TestRestTemplate restTemplate;
 
+    private static final String LOGIN_ENDPOINT = "/login";
+    public static final String USERNAME = "test";
+    public static final String PASSWORD = "test";
+    //    public static final String PASSWORD = "test";
     @Container
-    static final PostgreSQLContainer<?> DB_CONTAINER = new PostgreSQLContainer<>("postgres")
+    public static final PostgreSQLContainer<?> DB_CONTAINER = new PostgreSQLContainer<>("postgres")
             .withReuse(true)
             .withExposedPorts(DB_PORT)
             .withDatabaseName(DB_NAME)
             .withUsername(DB_USERNAME)
             .withPassword(DB_PASSWORD)
+//            .withInitScript("db/init.sql")
             .withNetwork(NETWORK);
 
     @Test
     void testPostgresLoads() {
-        assertTrue(DB_CONTAINER.isRunning());
+        Assertions.assertTrue(DB_CONTAINER.isRunning());
+    }
+
+// --- AuthController tests ---
+
+    @Test
+    @Rollback
+    void login() {
+        UserDto request = new UserDto(USERNAME, PASSWORD);
+        ResponseEntity<?> response = restTemplate.exchange(
+                LOGIN_ENDPOINT, HttpMethod.POST, new HttpEntity<>(request), String.class);
+        System.out.println(response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        assert (response.hasBody());
+    }
+
+//    @Test
+//    void loginWithJson() {
+//
+//    }
+
+    // --- FileController tests ---
+    @Test
+    void uploadFile() {
+    }
+
+    @Test
+    void deleteFile() {
+    }
+
+    @Test
+    void downloadFile() {
+    }
+
+    @Test
+    void editFileName() {
+    }
+
+    @Test
+    void getAllFiles() {
     }
 
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -56,4 +104,5 @@ class FileServiceApplicationTests {
             ).applyTo(configurableApplicationContext.getEnvironment());
         }
     }
+
 }

@@ -27,17 +27,17 @@ public class FileService {
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
 
-    public void uploadFile(String username, String fileName, MultipartFile file) throws IOException {
+    public void uploadFile(String username, MultipartFile file) throws IOException {
         UserEntity userEntity = getUserEntity(username);
         FileEntity fileEntity = new FileEntity();
-        fileEntity.setFileName(fileName);
+        fileEntity.setFileName(file.getOriginalFilename());
         fileEntity.setSize(file.getSize());
         fileEntity.setContent(file.getBytes());
         fileEntity.setUser(userEntity);
         try {
             fileRepository.save(fileEntity);
         } catch (Exception e) {
-            log.error("Error uploading file");
+            log.error("Error uploading file: {}", file.getOriginalFilename());
             throw new ErrorInputData(ERROR_INPUT_DATA.toString());
         }
     }
@@ -72,7 +72,7 @@ public class FileService {
         return fileEntities.stream().limit(limit).toList();
     }
 
-    private FileEntity getFileEntityByUserFileName(String username, String fileName) {
+    public FileEntity getFileEntityByUserFileName(String username, String fileName) {
         UserEntity user = getUserEntity(username);
         return fileRepository.findByFileNameAndUser(fileName, user)
                 .orElseThrow(() -> new ErrorGettingFileList(ERROR_FILE_LIST.toString()));

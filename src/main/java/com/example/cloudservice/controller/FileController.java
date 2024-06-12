@@ -22,11 +22,10 @@ public class FileController {
 
     @PostMapping("/file")
     public ResponseEntity<?> uploadFile(Principal userPrincipal,
-                                        @RequestParam("filename") String fileName,
                                         @RequestBody MultipartFile file) throws IOException {
 
-        fileService.uploadFile(userPrincipal.getName(), fileName, file);
-        log.info("File uploaded successfully: {}", fileName);
+        fileService.uploadFile(userPrincipal.getName(), file);
+        log.info("File uploaded successfully: {}", file.getOriginalFilename());
 
         return ResponseEntity.ok("Success upload");
     }

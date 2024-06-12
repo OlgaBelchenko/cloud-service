@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static com.example.cloudservice.testutils.Constants.USER_ENTITY;
-import static com.example.cloudservice.testutils.Constants.USERNAME;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.example.cloudservice.testutils.TestUtils.USERNAME;
+import static com.example.cloudservice.testutils.TestUtils.USER_ENTITY;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -30,6 +30,7 @@ class UserRepositoryTest {
 
     @Test
     void findUserByUsername() {
-        assertEquals(USER_ENTITY, userRepository.findUserByUsername(USERNAME).orElse(null));
+        assertThat(userRepository.findUserByUsername(USERNAME).orElse(null))
+                .isEqualTo(USER_ENTITY);
     }
 }

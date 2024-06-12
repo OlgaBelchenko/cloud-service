@@ -10,9 +10,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
-import static com.example.cloudservice.testutils.Constants.FILE_ENTITY;
-import static com.example.cloudservice.testutils.Constants.USER_ENTITY;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.example.cloudservice.testutils.TestUtils.FILE_ENTITY;
+import static com.example.cloudservice.testutils.TestUtils.USER_ENTITY;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -39,11 +39,13 @@ class FileRepositoryTest {
 
     @Test
     void findByFileNameAndUser() {
-        assertEquals(FILE_ENTITY, fileRepository.findByFileNameAndUser(FILE_ENTITY.getFileName(), USER_ENTITY).orElse(null));
+        assertThat(fileRepository.findByFileNameAndUser(FILE_ENTITY.getFileName(), USER_ENTITY).orElse(null))
+                .isEqualTo(FILE_ENTITY);
     }
 
     @Test
     void findAllByUser() {
-        assertEquals(List.of(FILE_ENTITY), fileRepository.findAllByUser(USER_ENTITY).orElse(null));
+        assertThat(fileRepository.findAllByUser(USER_ENTITY).orElse(null))
+                .isEqualTo(List.of(FILE_ENTITY));
     }
 }
