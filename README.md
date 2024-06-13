@@ -30,4 +30,5 @@ REST-интерфейс для интеграции с
 - Docker, docker-compose
 - Mockito
 - Testcontainers
+- jjwt
 - Lombok
