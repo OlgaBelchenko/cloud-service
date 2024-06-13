@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
-import static com.example.cloudservice.testutils.TestUtils.USERNAME;
 import static com.example.cloudservice.testutils.TestUtils.USER_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,17 +31,17 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.ofNullable(USER_ENTITY));
+        when(userRepository.findUserByUsername(USER_ENTITY.getUsername())).thenReturn(Optional.ofNullable(USER_ENTITY));
     }
 
     @Test
     void loadUserByUsername() {
         UserDetails userDetails = new CustomUserDetails(USER_ENTITY);
-        assertThat(userService.loadUserByUsername(USERNAME)).isEqualTo(userDetails);
+        assertThat(userService.loadUserByUsername(USER_ENTITY.getUsername())).isEqualTo(userDetails);
     }
 
     @Test
     void getUserFromDatabaseByUsername() {
-        assertEquals(USER_ENTITY, userService.getUserFromDatabaseByUsername(USERNAME));
+        assertEquals(USER_ENTITY, userService.getUserFromDatabaseByUsername(USER_ENTITY.getUsername()));
     }
 }

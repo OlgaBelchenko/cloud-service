@@ -16,10 +16,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-import static com.example.cloudservice.testutils.TestUtils.*;
+import static com.example.cloudservice.testutils.TestUtils.FILE_ENTITY;
+import static com.example.cloudservice.testutils.TestUtils.USER_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -47,7 +49,8 @@ class FileServiceTest {
     @SneakyThrows
     @Rollback
     void uploadFile() {
-        fileService.uploadFile(USER_ENTITY.getUsername(), MULTIPART_FILE);
+        MultipartFile multipartFile = mock(MultipartFile.class);
+        fileService.uploadFile(USER_ENTITY.getUsername(), multipartFile);
         verify(fileRepository, times(1)).save(any(FileEntity.class));
     }
 

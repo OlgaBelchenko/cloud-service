@@ -1,5 +1,6 @@
 package com.example.cloudservice.repository;
 
+import com.example.cloudservice.model.FileEntity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
-import static com.example.cloudservice.testutils.TestUtils.FILE_ENTITY;
-import static com.example.cloudservice.testutils.TestUtils.USER_ENTITY;
+import static com.example.cloudservice.testutils.TestUtils.USER_ENTITY_REPO;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -25,27 +25,34 @@ class FileRepositoryTest {
     @Autowired
     private FileRepository fileRepository;
 
+    private static final FileEntity FILE_ENTITY_REPO = FileEntity.builder()
+            .fileName("test.txt")
+            .size(4L)
+            .content("test".getBytes())
+            .user(USER_ENTITY_REPO)
+            .build();
+
     @BeforeAll
     void setUp() {
-        userRepository.save(USER_ENTITY);
-        fileRepository.save(FILE_ENTITY);
+        userRepository.save(USER_ENTITY_REPO);
+        fileRepository.save(FILE_ENTITY_REPO);
+
     }
 
     @AfterAll
     void tearDown() {
-        fileRepository.delete(FILE_ENTITY);
-        userRepository.delete(USER_ENTITY);
+        userRepository.delete(USER_ENTITY_REPO);
     }
 
     @Test
     void findByFileNameAndUser() {
-        assertThat(fileRepository.findByFileNameAndUser(FILE_ENTITY.getFileName(), USER_ENTITY).orElse(null))
-                .isEqualTo(FILE_ENTITY);
+        assertThat(fileRepository.findByFileNameAndUser(FILE_ENTITY_REPO.getFileName(), USER_ENTITY_REPO).orElse(null))
+                .isEqualTo(FILE_ENTITY_REPO);
     }
 
     @Test
     void findAllByUser() {
-        assertThat(fileRepository.findAllByUser(USER_ENTITY).orElse(null))
-                .isEqualTo(List.of(FILE_ENTITY));
+        assertThat(fileRepository.findAllByUser(USER_ENTITY_REPO).orElse(null))
+                .isEqualTo(List.of(FILE_ENTITY_REPO));
     }
 }
